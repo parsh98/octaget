@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Typography,
@@ -8,13 +8,17 @@ import {
   IconButton,
   ButtonGroup,
 } from '@mui/material';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import {
   addToCart,
   deleteAllItems,
@@ -22,7 +26,6 @@ import {
   removeProduct,
 } from '../store/reducers';
 import usePagination from './Pagination';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 function Checkout() {
   const cartItems = useSelector(state => state.cart?.cartItems);
@@ -31,11 +34,13 @@ function Checkout() {
   const PER_PAGE = 6;
   const count = Math.ceil(cartItems.length / PER_PAGE);
   const _DATA = usePagination(cartItems, PER_PAGE);
-  let [page, setPage] = React.useState(1);
+  const [page, setPage] = useState(1);
+
   const handlePageChange = (e, p) => {
     setPage(p);
     _DATA.jump(p);
   };
+
   const emptyHandler = () => {
     dispatch(deleteAllItems());
   };
@@ -49,14 +54,14 @@ function Checkout() {
   };
 
   return (
-    <React.Fragment>
+    <>
       <Box
-        display={'flex'}
-        justifyContent={'space-between'}
-        alignItems={'center'}
-        mb={'1rem'}
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb="1rem"
       >
-        <Typography variant="h5" mb={'1rem'}>
+        <Typography variant="h5" mb="1rem">
           Checkout
         </Typography>
         <Button
@@ -71,10 +76,10 @@ function Checkout() {
             },
           }}
         >
-          <Typography fontWeight={'600'}>Empty Cart</Typography>
+          <Typography fontWeight="600">Empty Cart</Typography>
         </Button>
       </Box>
-      <Box ml={'1rem'}>
+      <Box ml="1rem">
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 1100 }} aria-label="simple table">
             <TableHead>
@@ -141,7 +146,7 @@ function Checkout() {
                 </TableRow>
               ))}
               <TableRow
-                key={'total'}
+                key="total"
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
@@ -157,8 +162,8 @@ function Checkout() {
           </Table>
         </TableContainer>
       </Box>
-      <Box display={'flex'} justifyContent={'end'} mt={'1rem'}>
-        {cartItems?.length !== 0 ? (
+      <Box display="flex" justifyContent="end" mt="1rem">
+        {cartItems?.length !== 0 && (
           <Pagination
             count={count}
             page={page}
@@ -166,11 +171,9 @@ function Checkout() {
             onChange={handlePageChange}
             color="primary"
           />
-        ) : (
-          ''
         )}
       </Box>
-    </React.Fragment>
+    </>
   );
 }
 

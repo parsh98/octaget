@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Grid, Pagination, Typography } from '@mui/material';
-import usePagination from './Pagination';
 import { useDispatch, useSelector } from 'react-redux';
-import { storeProductList } from '../store/reducers';
-import Product from './Product';
 import axios from 'axios';
+import Product from './Product';
+import usePagination from './Pagination';
+import { storeProductList } from '../store/reducers';
 
 const ProductList = () => {
   const dispatch = useDispatch();
@@ -12,7 +12,8 @@ const ProductList = () => {
   const PER_PAGE = 6;
   const count = Math.ceil(products.length / PER_PAGE);
   const _DATA = usePagination(products, PER_PAGE);
-  let [page, setPage] = React.useState(1);
+  const [page, setPage] = useState(1);
+
   const handlePageChange = (e, p) => {
     setPage(p);
     _DATA.jump(p);
@@ -32,16 +33,14 @@ const ProductList = () => {
   }, [dispatch]);
 
   return (
-    <React.Fragment>
-      <Grid container minHeight={'76vh'}>
-        {products?.length !== 0 ? (
-          _DATA?.currentData().map(item => {
-            return (
-              <Grid item md={4} key={item.id}>
-                <Product product={item} />
-              </Grid>
-            );
-          })
+    <>
+      <Grid container minHeight="76vh">
+        {products.length !== 0 ? (
+          _DATA.currentData().map(item => (
+            <Grid item md={4} key={item.id}>
+              <Product product={item} />
+            </Grid>
+          ))
         ) : (
           <Box
             sx={{
@@ -54,8 +53,8 @@ const ProductList = () => {
           </Box>
         )}
       </Grid>
-      <Box display={'flex'} justifyContent={'end'}>
-        {products?.length !== 0 ? (
+      <Box display="flex" justifyContent="end">
+        {products.length !== 0 && (
           <Pagination
             count={count}
             page={page}
@@ -63,11 +62,9 @@ const ProductList = () => {
             onChange={handlePageChange}
             color="primary"
           />
-        ) : (
-          ''
         )}
       </Box>
-    </React.Fragment>
+    </>
   );
 };
 

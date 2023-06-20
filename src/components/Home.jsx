@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -9,6 +9,18 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Navbar from './Navbar';
 import ProductList from './ProductList';
 import Checkout from './Checkout';
+
+const styles = {
+  defaultTab: {
+    color: '#000',
+    backgroundColor: '#e3e3e3',
+    fontWeight: 400,
+  },
+  activeTab: {
+    backgroundColor: '#fff',
+  },
+};
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -29,42 +41,23 @@ function TabPanel(props) {
   );
 }
 
-var styles = {
-  default_tab: {
-    color: '#000',
-    backgroundColor: '#e3e3e3',
-    fontWeight: 400,
-  },
-  active_tab: {
-    backgroundColor: '#fff',
-  },
-};
-
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
 };
 
-function a11yProps(index) {
-  return {
-    id: `vertical-tab-${index}`,
-    'aria-controls': `vertical-tabpanel-${index}`,
-  };
-}
-
-export default function VerticalTabs() {
-  const [value, setValue] = React.useState(0);
+function VerticalTabs() {
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const getTabStyle = index => {
-    if (value === index) {
-      return { ...styles.default_tab, ...styles.active_tab };
-    }
-    return styles.default_tab;
+    return value === index
+      ? { ...styles.defaultTab, ...styles.activeTab }
+      : styles.defaultTab;
   };
 
   return (
@@ -108,13 +101,11 @@ export default function VerticalTabs() {
                 Home
               </Box>
             }
-            {...a11yProps(0)}
           />
           <Tab
             disableRipple
             style={getTabStyle(1)}
             sx={{ alignItems: 'start', textTransform: 'none' }}
-            {...a11yProps(1)}
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <ShoppingBasketIcon sx={{ marginRight: '0.5rem' }} />
@@ -132,7 +123,6 @@ export default function VerticalTabs() {
                 Settings
               </Box>
             }
-            {...a11yProps(2)}
           />
         </Tabs>
         <TabPanel value={value} index={0}>
@@ -148,3 +138,5 @@ export default function VerticalTabs() {
     </Box>
   );
 }
+
+export default VerticalTabs;

@@ -14,19 +14,26 @@ function Product({ product }) {
   const { title, price, description, stock, id, images } = product;
 
   const dispatch = useDispatch();
-  const quantity = useSelector(state => {
-    const cartItem = state.cart.cartItems.find(item => item.id === id);
-    return cartItem ? cartItem.quantity : 0;
-  });
+  const cartItem = useSelector(state =>
+    state.cart.cartItems.find(item => item.id === id)
+  );
+  const quantity = cartItem ? cartItem.quantity : 0;
 
   const handleAddToCart = () => {
-    if (quantity <= stock) {
+    if (quantity < stock) {
       dispatch(addToCart({ product, quantity: quantity + 1 }));
+    }
+  };
+
+  const handleDeleteFromCart = () => {
+    if (quantity > 0) {
+      dispatch(deleteFromCart({ product, quantity: quantity - 1 }));
     }
   };
 
   return (
     <Box
+      key={id}
       sx={{
         border: '2px solid #e6e6e6',
         borderRadius: '5px',
@@ -35,15 +42,14 @@ function Product({ product }) {
         p: '1rem',
         mb: '2rem',
       }}
-      key={id}
     >
-      <Box display={'flex'} justifyContent={'space-between'}>
+      <Box display="flex" justifyContent="space-between">
         <Typography variant="h5">
           {title.length > 12 ? `${title.slice(0, 12)}...` : title}
         </Typography>
         <Typography variant="p">Avail Qty: {stock}</Typography>
       </Box>
-      <Box display={'flex'} justifyContent={'space-between'} gap={'1rem'}>
+      <Box display="flex" justifyContent="space-between" gap="1rem">
         <Stack spacing={2}>
           <Tooltip title={description} placement="top" arrow>
             <Typography variant="p">
@@ -61,18 +67,13 @@ function Product({ product }) {
 
               <Button disabled>{quantity}</Button>
 
-              <Button
-                disabled={quantity <= 0}
-                onClick={() => {
-                  dispatch(deleteFromCart({ product, quantity: quantity - 1 }));
-                }}
-              >
+              <Button disabled={quantity <= 0} onClick={handleDeleteFromCart}>
                 -
               </Button>
             </ButtonGroup>
           </Box>
         </Stack>
-        <img src={images[0]} width={'120px'} height={'150px'} alt={title} />
+        <img src={images[0]} width="120px" height="150px" alt={title} />
       </Box>
       <Box>
         <Typography variant="p">Price: ${price}</Typography>
