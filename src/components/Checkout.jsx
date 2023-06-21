@@ -111,7 +111,7 @@ function Checkout() {
                   <TableCell align="right">
                     <ButtonGroup size="small" aria-label="button-group">
                       <Button
-                        disabled={cart.quantity <= 0}
+                        disabled={cart.quantity >= cart?.stock}
                         onClick={() =>
                           handleEditQuantity(cart, cart.quantity - 1)
                         }
@@ -120,7 +120,6 @@ function Checkout() {
                       </Button>
                       <Button disabled>{cart.quantity}</Button>
                       <Button
-                        disabled={cart.quantity >= cart.stock}
                         onClick={() => {
                           console.log(cart);
                           dispatch(

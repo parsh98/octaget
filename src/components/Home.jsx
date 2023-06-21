@@ -47,7 +47,7 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-function VerticalTabs() {
+function Home() {
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -139,4 +139,4 @@ function VerticalTabs() {
   );
 }
 
-export default VerticalTabs;
+export default Home;
